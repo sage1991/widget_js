@@ -1,5 +1,9 @@
 function InkWell(buildContext) {
     buildContext = (buildContext != null) ? buildContext : {};
+    
+    this.inkColor = (buildContext.inkColor) ? buildContext.inkColor : "rgba(150, 150, 150, 0.1)";
+    this.backgroundColor = (buildContext.backgroundColor) ? buildContext.backgroundColor : "rgba(100, 100, 100, 0.1)";
+    this.diffusionSpeed = (buildContext.diffusionSpeed) ? buildContext.diffusionSpeed : 5;
     WebWidget.call(this, buildContext);
 }
 InkWell.prototype = Object.create(WebWidget.prototype);
@@ -13,7 +17,7 @@ InkWell.prototype.initWidget = function() {
 
 
 InkWell.prototype.build = function() {
-    return  "<div data-widget-name='InkWell' style='position: relative; " + this.style + "' data-key='" + this.key + "'>" + 
+    return  "<div data-widget-name='InkWell' class='ink_well' style='" + this.style + "' data-key='" + this.key + "'>" + 
                 "<svg style='width: 100%; height: 100%; position: absolute; left: 0; top:0; margin: 0; padding: 0; transition: background-color 0.5s;'></svg>" +
                 "<div style='position: absolute; top:0; width: 100%; height: 100%; margin: 0; padding: 0;'></div>" + 
             "</div>";
@@ -24,31 +28,52 @@ InkWell.prototype.initState = function() {
     
     var _this = this;
     this.radius = 0;
+    
     this.svg = this.html.querySelector("svg");
     this.inkWellAnimationId = null;
     this.circle = null;
     
+    // trigger inkwell animation when touch start
     this.html.addEventListener("touchstart", function(e) {
+        
         if(_this.circle == null) {
+            var x = e.targetTouches[0].pageX - _this.html.offsetLeft;
+            var y = e.targetTouches[0].pageY - _this.html.offsetTop;
             _this.circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            _this.circle.setAttribute("cx", e.offsetX);
-            _this.circle.setAttribute("cy", e.offsetY);
+            _this.circle.setAttribute("cx", x);
+            _this.circle.setAttribute("cy", y);
             _this.circle.setAttribute("r", _this.radius);
-            _this.circle.setAttribute("fill", "grey");
-            _this.circle.setAttribute("style", "opacity:0.15;");
-
-            _this.svg.style.backgroundColor = "rgba(100, 100, 100, 0.1)";
+            _this.circle.setAttribute("fill", _this.inkColor);
+            _this.svg.style.backgroundColor = _this.backgroundColor;
             _this.svg.appendChild(_this.circle);
-
+            
+            // inkwell animation
             var animate = function() {
-                _this.radius += 5;
+                
+                _this.maxRadius = Math.sqrt(Math.pow(_this.html.offsetWidth, 2) + Math.pow(_this.html.offsetHeight, 2));
+                
+                _this.radius += _this.diffusionSpeed;
                 _this.circle.setAttribute("r", _this.radius);
                 _this.inkWellAnimationId = requestAnimationFrame(animate);
+                
+                // cancel animation when radius reach up to max radius
+                if(_this.maxRadius <= _this.radius) {
+                    cancelAnimationFrame(_this.inkWellAnimationId);
+                    _this.inkWellAnimationId = null;
+                } 
+                
+                // other case
+                else {
+                    _this.circle.setAttribute("r", _this.radius);
+                    _this.inkWellAnimationId = requestAnimationFrame(animate);
+                }
             }
+            
             animate();
         }
     });
     
+    // cancel inkwell animation wen touch move or end
     this.html.addEventListener("touchmove", function(e) {
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
@@ -59,7 +84,6 @@ InkWell.prototype.initState = function() {
             _this.svg.style.backgroundColor = "transparent";
         }
     });
-    
     this.html.addEventListener("touchend", function(e) {
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
@@ -75,5 +99,12 @@ InkWell.prototype.initState = function() {
 
 
 InkWell.prototype.destroy = function() {
-    
+    if(this.circle != null) {
+        cancelAnimationFrame(this.inkWellAnimationId);
+        this.radius = 0;
+        this.inkWellAnimationId = null;
+        this.svg.removeChild(_this.circle);
+        this.circle = null;
+        this.svg.style.backgroundColor = "transparent";
+    }
 }

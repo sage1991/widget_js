@@ -50,11 +50,48 @@ WebWidget.prototype.build = /* abstract */ function() {
 WebWidget.prototype.initState = /* abstract */ function() {}
 
 
+
+/*
+    [ onRender() ]
+    - 화면에 랜더링 된 직후
+*/
+WebWidget.prototype.onRender = /* abstract */ function() {}
+
+
+
 /*
     [ destroy() ]
     - 리소스 정리
 */
 WebWidget.prototype.destroy = /* abstract */ function() {}
+
+
+
+
+
+WebWidget.prototype.triggerDestroyChain = /* abstract */ function() {
+    if(this.child != null) {
+        this.child.triggerDestroyChain();
+    } else if(this.children != null) {
+        for(var i = 0; i < this.children.length; i++) {
+            this.children[i].triggerDestroyChain();
+        }
+    }
+    this.destroy();
+}
+
+
+WebWidget.prototype.triggerRenderChain = /* abstract */ function() {
+    if(this.child != null) {
+        this.child.triggerRenderChain();
+    } else if(this.children != null) {
+        for(var i = 0; i < this.children.length; i++) {
+            this.children[i].triggerRenderChain();
+        }
+    }
+    this.onRender();
+}
+
 
 
 
@@ -84,13 +121,15 @@ WebWidget.prototype.initChildWidget = function() {
 */
 WebWidget.prototype.appendToDOM = function(htmlElement) {
     htmlElement.appendChild(this.html);
+    
+    this.onRender();
 }
 
 /*
     [ appendTo ]
 */
 WebWidget.prototype.removeFromDOM = function(htmlElement) {
-    this.destroy();
+    this.triggerDestroyChain();
     htmlElement.removeChild(this.html);
 }
 
