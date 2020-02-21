@@ -1,13 +1,13 @@
-function FlatButton(buildContext) {
+function FlatButton(context) {
     
-    buildContext = (buildContext != null) ? buildContext : {};
-    buildContext.style = (buildContext.style == null) ? "width:100%; height:100%; background-color:transparent; border:none;" : buildContext.style;
+    context = (context != null) ? context : {};
+    context.style = (context.style == null) ? "width:100%; height:100%; background-color:transparent; border:none;" : context.style;
     
-    this.text = (buildContext.text != null) ? buildContext.text : "";
-    this.onClick = buildContext.onClick;
+    this.text = (context.text != null) ? context.text : "";
+    this.onClick = context.onClick;
     
     
-    Widget.call(this, buildContext);
+    Widget.call(this, context);
 }
 FlatButton.prototype = Object.create(Widget.prototype);
 

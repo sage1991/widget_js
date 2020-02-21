@@ -1,6 +1,6 @@
-function Skeleton(buildContext) {
-    buildContext = (buildContext != null) ? buildContext : {};
-    Widget.call(this, buildContext);
+function Skeleton(context) {
+    context = (context != null) ? context : {};
+    Widget.call(this, context);
 }
 Skeleton.prototype = Object.create(Widget.prototype);
 

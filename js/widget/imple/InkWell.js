@@ -1,10 +1,10 @@
-function InkWell(buildContext) {
-    buildContext = (buildContext != null) ? buildContext : {};
+function InkWell(context) {
+    context = (context != null) ? context : {};
     
-    this.inkColor = (buildContext.inkColor) ? buildContext.inkColor : "rgba(150, 150, 150, 0.1)";
-    this.backgroundColor = (buildContext.backgroundColor) ? buildContext.backgroundColor : "rgba(100, 100, 100, 0.1)";
-    this.diffusionSpeed = (buildContext.diffusionSpeed) ? buildContext.diffusionSpeed : 5;
-    Widget.call(this, buildContext);
+    this.inkColor = (context.inkColor) ? context.inkColor : "rgba(150, 150, 150, 0.1)";
+    this.backgroundColor = (context.backgroundColor) ? context.backgroundColor : "rgba(100, 100, 100, 0.1)";
+    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 5;
+    Widget.call(this, context);
 }
 InkWell.prototype = Object.create(Widget.prototype);
 
