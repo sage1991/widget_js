@@ -4,9 +4,9 @@ function InkWell(buildContext) {
     this.inkColor = (buildContext.inkColor) ? buildContext.inkColor : "rgba(150, 150, 150, 0.1)";
     this.backgroundColor = (buildContext.backgroundColor) ? buildContext.backgroundColor : "rgba(100, 100, 100, 0.1)";
     this.diffusionSpeed = (buildContext.diffusionSpeed) ? buildContext.diffusionSpeed : 5;
-    WebWidget.call(this, buildContext);
+    Widget.call(this, buildContext);
 }
-InkWell.prototype = Object.create(WebWidget.prototype);
+InkWell.prototype = Object.create(Widget.prototype);
 
 
 

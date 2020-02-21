@@ -1,8 +1,8 @@
 function Skeleton(buildContext) {
     buildContext = (buildContext != null) ? buildContext : {};
-    WebWidget.call(this, buildContext);
+    Widget.call(this, buildContext);
 }
-Skeleton.prototype = Object.create(WebWidget.prototype);
+Skeleton.prototype = Object.create(Widget.prototype);
 
 
 

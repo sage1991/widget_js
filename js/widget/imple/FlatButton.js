@@ -7,9 +7,9 @@ function FlatButton(buildContext) {
     this.onClick = buildContext.onClick;
     
     
-    WebWidget.call(this, buildContext);
+    Widget.call(this, buildContext);
 }
-FlatButton.prototype = Object.create(WebWidget.prototype);
+FlatButton.prototype = Object.create(Widget.prototype);
 
 
 

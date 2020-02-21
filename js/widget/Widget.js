@@ -1,22 +1,30 @@
 var domParser = new DOMParser();
 
-function WebWidget(buildContext) {
+function Widget(context) {
     
-    buildContext = (buildContext != null) ? buildContext : {};
+    context = (context != null) ? context : {};
     
-    this.key = (buildContext.key != null) ? buildContext.key : "";
-    this.parent = null;
-    this.child = (buildContext.child != null) ? buildContext.child : null;
-    this.children = (this.child == null && buildContext.children != null) ? buildContext.children : null;
-    this.style = (buildContext.style != null) ? buildContext.style : "";
-    this.class = (buildContext.class != null) ? buildContext.class : "";
+    // 쿼리용 key
+    this.key = (context.key != null) ? context.key : "";
     
-    this.html = this.parseDOMFromString(this.build());
-    this.initWidget();
-    this.initState();
+    this.initWidget(context);
+    this.initEvent();
+    
+    // 가상 DOM 구조
+    this.parent = null;  // 부모 객체에서 참조 주입
+    this.html = this.parseDOMFromString(this.build());  // html element 수정 필요.
+    
+    // 스타일 설정
+    this.style = (context.style != null) ? context.style : kDefaultStyle;
+    for(var key in this.style) {
+        this.html.style[key] = this.style[key];
+    }
+    
+    this.ready();
+    
+    
     this.initChildWidget();
     this.initState();
-    
 }
 
 
@@ -31,15 +39,15 @@ function WebWidget(buildContext) {
     [ initWidget() ]
     - DOM에 대한 참조를 얻는곳
 */
-WebWidget.prototype.initWidget = /* abstract */ function() {}
+Widget.prototype.initWidget = /* abstract */ function(context) {}
 
 
 /*
     [ build() ]
     - widget이 표현 할 html을 리턴
 */
-WebWidget.prototype.build = /* abstract */ function() {
-    return  "<div data-widget-name='WebWidget' data-key=''></div>";  // return html string
+Widget.prototype.build = /* abstract */ function() {
+    return  "<div data-widget-name='Widget' data-key=''></div>";  // return html string
 }
 
 
@@ -47,7 +55,7 @@ WebWidget.prototype.build = /* abstract */ function() {
     [ initState() ]
     - 변수 및 이벤트 초기화
 */
-WebWidget.prototype.initState = /* abstract */ function() {}
+Widget.prototype.initState = /* abstract */ function() {}
 
 
 
@@ -55,7 +63,7 @@ WebWidget.prototype.initState = /* abstract */ function() {}
     [ onRender() ]
     - 화면에 랜더링 된 직후
 */
-WebWidget.prototype.onRender = /* abstract */ function() {}
+Widget.prototype.onRender = /* abstract */ function() {}
 
 
 
@@ -63,13 +71,13 @@ WebWidget.prototype.onRender = /* abstract */ function() {}
     [ destroy() ]
     - 리소스 정리
 */
-WebWidget.prototype.destroy = /* abstract */ function() {}
+Widget.prototype.destroy = /* abstract */ function() {}
 
 
 
 
 
-WebWidget.prototype.triggerDestroyChain = /* abstract */ function() {
+Widget.prototype.triggerDestroyChain = /* abstract */ function() {
     if(this.child != null) {
         this.child.triggerDestroyChain();
     } else if(this.children != null) {
@@ -81,7 +89,7 @@ WebWidget.prototype.triggerDestroyChain = /* abstract */ function() {
 }
 
 
-WebWidget.prototype.triggerRenderChain = /* abstract */ function() {
+Widget.prototype.triggerRenderChain = /* abstract */ function() {
     if(this.child != null) {
         this.child.triggerRenderChain();
     } else if(this.children != null) {
@@ -99,7 +107,7 @@ WebWidget.prototype.triggerRenderChain = /* abstract */ function() {
     [ initChildWidget() ]
     - child widget 초기화
 */
-WebWidget.prototype.initChildWidget = function() {
+Widget.prototype.initChildWidget = function() {
     if(this.container != null) {
         if(this.children != null) {
             for(var i = 0; i < this.children.length; i++) {
@@ -119,7 +127,7 @@ WebWidget.prototype.initChildWidget = function() {
 /*
     [ appendTo ]
 */
-WebWidget.prototype.appendToDOM = function(htmlElement) {
+Widget.prototype.appendToDOM = function(htmlElement) {
     htmlElement.appendChild(this.html);
     
     this.onRender();
@@ -128,35 +136,35 @@ WebWidget.prototype.appendToDOM = function(htmlElement) {
 /*
     [ appendTo ]
 */
-WebWidget.prototype.removeFromDOM = function(htmlElement) {
+Widget.prototype.removeFromDOM = function(htmlElement) {
     this.triggerDestroyChain();
     htmlElement.removeChild(this.html);
 }
 
 
-WebWidget.prototype.appendChildWidget = function(webWidget) {
+Widget.prototype.appendChildWidget = function(Widget) {
     if(this.container != null) {
-        this.child = webWidget;
-        webWidget.parent = this;
-        this.container.appendChild(webWidget.html);
+        this.child = Widget;
+        Widget.parent = this;
+        this.container.appendChild(Widget.html);
     }
     
 }
 
 
 
-WebWidget.prototype.pushChildWidget = function(webWidget) {
+Widget.prototype.pushChildWidget = function(Widget) {
     if(this.container != null) {
-        this.children.push(webWidget);
-        webWidget.parent = this;
-        this.container.appendChild(webWidget.html);
+        this.children.push(Widget);
+        Widget.parent = this;
+        this.container.appendChild(Widget.html);
     }
 }
 
 
 
 
-WebWidget.prototype.getElementsByKey = function(key) {
+Widget.prototype.getElementsByKey = function(key) {
     if(this.html.dataset.key == key) {
         return this.html;
     } else {
@@ -191,7 +199,7 @@ WebWidget.prototype.getElementsByKey = function(key) {
 }
 
 
-WebWidget.prototype.reomveChildWidget = function() {
+Widget.prototype.reomveChildWidget = function() {
     if(this.child != null) {
         this.child.destroy();
         this.container.removeChild(this.child);
@@ -201,7 +209,7 @@ WebWidget.prototype.reomveChildWidget = function() {
 }
 
 
-WebWidget.prototype.reomveNthChildWidget = function(index) {
+Widget.prototype.reomveNthChildWidget = function(index) {
     if(this.children != null && this.children.length - 1 >= index && index >= 0) {
         this.children[index].destroy();
         this.container.removeChild(this.children[index]);
@@ -216,6 +224,6 @@ WebWidget.prototype.reomveNthChildWidget = function(index) {
 
 
 
-WebWidget.prototype.parseDOMFromString = function(htmlString) {
+Widget.prototype.parseDOMFromString = function(htmlString) {
     return domParser.parseFromString(htmlString, "text/html").body.firstChild;
 }
