@@ -6,21 +6,47 @@
     <link rel="stylesheet" href="css/widget.css">
 </head>
 <body onload="initApp()">
-   
+    
+    <!-- view -->
     <div id="widget_view"></div>
+    
+    
     <script src="js/App.js"></script>
+    <script src="js/Navigator.js"></script>
     <script src="js/util/Logger.js"></script>
+    <script src="js/widget/WidgetParser.js"></script>
+    <script src="js/widget/Widget.js"></script>
+    <script src="js/widget/ChildWidget.js"></script>
+    <script src="js/widget/ChildrenWidget.js"></script>
+    <script src="js/widget/imple/InkWell.js"></script>
+    <script src="js/widget/imple/FlatButton.js"></script>
+    <script src="js/widget/config/configs.js"></script>
+    
+    
+    
     <script>
         
-        var app = new App();
-        var navigator = new Navigator();
+        var app = null;
+        var navigator = null;
         var view = document.getElementById("widget_view");
+        console.log(view);
         Logger.setLevel(Logger.LEVEL.TRACE);
         
+        
         function initApp() {
+            app = new App();
+            n = new Navigator(document.getElementById("widget_view"));
+            n.route({
+                "/" : new InkWell({
+                    child : new FlatButton({
+                        onClick : function() {
+                            alert("wow!");
+                        },
+                        text : "hello world!!!"
+                    }),
+                }),
+            });
             
-            var app = new App();
-            var navigator = new Navigator();
             var view = document.getElementById("widget_view");
             Logger.setLevel(Logger.LEVEL.TRACE);
             
@@ -32,9 +58,10 @@
                     app.onBackButton();
                 }, false);
                 
-                app.onReady();
+                
                 
             }, false);
+            app.onReady();
         }
         
         

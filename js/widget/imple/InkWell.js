@@ -1,34 +1,40 @@
 function InkWell(context) {
+    
     context = (context != null) ? context : {};
     
     this.inkColor = (context.inkColor) ? context.inkColor : "rgba(150, 150, 150, 0.1)";
     this.backgroundColor = (context.backgroundColor) ? context.backgroundColor : "rgba(100, 100, 100, 0.1)";
-    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 5;
-    Widget.call(this, context);
+    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 1;
+    
+    ChildWidget.call(this, context);
 }
-InkWell.prototype = Object.create(Widget.prototype);
+InkWell.prototype = Object.create(ChildWidget.prototype);
 
 
 
 
 InkWell.prototype.initWidget = function() {
-    this.container = this.html.querySelector("div");
+    
+    this.frame = this.html.querySelector("div");
+    this._initEvent();
+    
+    
 }
 
 
 InkWell.prototype.build = function() {
-    return  "<div data-widget-name='InkWell' class='ink_well' style='" + this.style + "' data-key='" + this.key + "'>" + 
+    return  "<div data-widget-name='InkWell' class='ink_well' style='' data-key='" + this.key + "' data-group='" + this.group + "'>" + 
                 "<svg style='width: 100%; height: 100%; position: absolute; left: 0; top:0; margin: 0; padding: 0; transition: background-color 0.5s;'></svg>" +
                 "<div style='position: absolute; top:0; width: 100%; height: 100%; margin: 0; padding: 0;'></div>" + 
             "</div>";
 }
 
 
-InkWell.prototype.initState = function() {
+InkWell.prototype._initEvent = function() {
     
     var _this = this;
-    this.radius = 0;
     
+    this.radius = 0;
     this.svg = this.html.querySelector("svg");
     this.inkWellAnimationId = null;
     this.circle = null;
@@ -98,7 +104,8 @@ InkWell.prototype.initState = function() {
 }
 
 
-InkWell.prototype.destroy = function() {
+InkWell.prototype.onDestroy = function() {
+    
     if(this.circle != null) {
         cancelAnimationFrame(this.inkWellAnimationId);
         this.radius = 0;
