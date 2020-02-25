@@ -23,7 +23,7 @@ FlatButton.prototype.initWidget = function() {
 
 /* @override */
 FlatButton.prototype.build = function() {
-    return  "<button data-widget-name='FlatButton' data-key='" + this.key + "' data-group='" + this.group + "'>" +
+    return  "<button data-widget-name='FlatButton' data-key='" + this.key + "' data-group='" + this.group + "' class='flat_button'>" +
                 this.text + 
             "</button>";
 }

@@ -4,7 +4,7 @@ function InkWell(context) {
     
     this.inkColor = (context.inkColor) ? context.inkColor : "rgba(150, 150, 150, 0.1)";
     this.backgroundColor = (context.backgroundColor) ? context.backgroundColor : "rgba(100, 100, 100, 0.1)";
-    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 1;
+    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 8;
     
     ChildWidget.call(this, context);
 }
@@ -14,11 +14,8 @@ InkWell.prototype = Object.create(ChildWidget.prototype);
 
 
 InkWell.prototype.initWidget = function() {
-    
     this.frame = this.html.querySelector("div");
     this._initEvent();
-    
-    
 }
 
 
@@ -31,9 +28,7 @@ InkWell.prototype.build = function() {
 
 
 InkWell.prototype._initEvent = function() {
-    
     var _this = this;
-    
     this.radius = 0;
     this.svg = this.html.querySelector("svg");
     this.inkWellAnimationId = null;
@@ -57,22 +52,21 @@ InkWell.prototype._initEvent = function() {
             var animate = function() {
                 
                 _this.maxRadius = Math.sqrt(Math.pow(_this.html.offsetWidth, 2) + Math.pow(_this.html.offsetHeight, 2));
-                
                 _this.radius += _this.diffusionSpeed;
                 _this.circle.setAttribute("r", _this.radius);
                 _this.inkWellAnimationId = requestAnimationFrame(animate);
                 
                 // cancel animation when radius reach up to max radius
-                if(_this.maxRadius <= _this.radius) {
-                    cancelAnimationFrame(_this.inkWellAnimationId);
-                    _this.inkWellAnimationId = null;
-                } 
-                
-                // other case
-                else {
-                    _this.circle.setAttribute("r", _this.radius);
-                    _this.inkWellAnimationId = requestAnimationFrame(animate);
-                }
+//                if(_this.maxRadius <= _this.radius) {
+//                    cancelAnimationFrame(_this.inkWellAnimationId);
+//                    _this.inkWellAnimationId = null;
+//                } 
+//                
+//                // other case
+//                else {
+//                    _this.circle.setAttribute("r", _this.radius);
+//                    _this.inkWellAnimationId = requestAnimationFrame(animate);
+//                }
             }
             
             animate();
@@ -83,18 +77,20 @@ InkWell.prototype._initEvent = function() {
     this.html.addEventListener("touchmove", function(e) {
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
-            _this.radius = 0;
             _this.inkWellAnimationId = null;
+            _this.radius = 0;
             _this.svg.removeChild(_this.circle);
             _this.circle = null;
             _this.svg.style.backgroundColor = "transparent";
         }
     });
+    
+    
     this.html.addEventListener("touchend", function(e) {
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
-            _this.radius = 0;
             _this.inkWellAnimationId = null;
+            _this.radius = 0;
             _this.svg.removeChild(_this.circle);
             _this.circle = null;
             _this.svg.style.backgroundColor = "transparent";

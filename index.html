@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <title>widget.js</title>
     <link rel="stylesheet" href="css/widget.css">
 </head>
@@ -12,7 +13,7 @@
     
     
     <script src="js/App.js"></script>
-    <script src="js/Navigator.js"></script>
+    <script src="js/Navigation.js"></script>
     <script src="js/util/Logger.js"></script>
     <script src="js/widget/WidgetParser.js"></script>
     <script src="js/widget/Widget.js"></script>
@@ -20,6 +21,8 @@
     <script src="js/widget/ChildrenWidget.js"></script>
     <script src="js/widget/imple/InkWell.js"></script>
     <script src="js/widget/imple/FlatButton.js"></script>
+    <script src="js/widget/imple/Center.js"></script>
+    <script src="js/widget/imple/Scaffold.js"></script>
     <script src="js/widget/config/configs.js"></script>
     
     
@@ -27,40 +30,26 @@
     <script>
         
         var app = null;
-        var navigator = null;
-        var view = document.getElementById("widget_view");
-        console.log(view);
         Logger.setLevel(Logger.LEVEL.TRACE);
         
         
         function initApp() {
-            app = new App();
-            n = new Navigator(document.getElementById("widget_view"));
-            n.route({
-                "/" : new InkWell({
-                    child : new FlatButton({
-                        onClick : function() {
-                            alert("wow!");
-                        },
-                        text : "hello world!!!"
-                    }),
-                }),
-            });
             
-            var view = document.getElementById("widget_view");
+            app = new App();
             Logger.setLevel(Logger.LEVEL.TRACE);
             
             Logger.trace(Logger.STATUS.OK, "initApp()", "init app function is called");
             
-            document.addEventListener("deviceready", function() {
-                
-                document.addEventListener("backbutton", function() {
-                    app.onBackButton();
-                }, false);
-                
-                
-                
-            }, false);
+//            document.addEventListener("deviceready", function() {
+//                
+//                document.addEventListener("backbutton", function() {
+//                    app.onBackButton();
+//                }, false);
+//                
+//                
+//                
+//            }, false);
+            
             app.onReady();
         }
         
