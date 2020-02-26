@@ -31,3 +31,9 @@ FlatButton.prototype.build = function() {
 
 /* @override */
 FlatButton.prototype.destroy = function() {}
+
+
+FlatButton.prototype.setText = function(text) {
+    this.html.innerText = text;
+}
+

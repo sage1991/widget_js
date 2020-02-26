@@ -66,6 +66,7 @@ Widget.prototype.appendTo = function(target) {
     target.appendChild(this.html);
 }
 
+
 /*
     [ removeFrom() ]
 */
@@ -74,40 +75,25 @@ Widget.prototype.removeFrom = function(target) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*
     [ initChildWidget() ]
     - child widget 초기화
 */
-Widget.prototype.initWidgetTree = function() {
-    if(this.container != null) {
-        if(this.children != null) {
-            for(var i = 0; i < this.children.length; i++) {
-                this.children[i].parent = this;
-                this.container.appendChild(this.children[i].html);
-            }
-        } else if(this.child != null) {
-            this.child.parent = this;
-            this.container.appendChild(this.child.html);
-        }
-    }
-}
+Widget.prototype.initWidgetTree = function() {}
 
 
 Widget.prototype.getWidgetByKey = function(key) {}
 
 
-Widget.prototype.getWidgetsByGroup = function(key) {}
+Widget.prototype.getWidgetsByGroup = function(group) {}
 
+
+Widget.prototype.addClass = function(clazz) {
+    this.html.className += " " + clazz;
+}
+
+Widget.prototype.removeClass = function(clazz) {
+    var classToken = this.html.className;
+    this.html.className = classToken.replace(clazz, "").replace(/\s{2,}/g, " ");
+}
 

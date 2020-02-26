@@ -7,25 +7,7 @@ App.prototype.onReady = function () {
     window.Navigation = new Navigation(document.getElementById("widget_view"));
 
     Navigation.route({
-        "/": new InkWell({
-            child: new Center({
-                child: new FlatButton({
-                    onClick: function () {
-                        alert("wow!");
-                    },
-                    text: "hello world!!!",
-                    style: {
-                        width: "100px",
-                        height: "100px",
-                        fontSize: "20px",
-                        backgroundColor : "blue"
-                    }
-                }), // flat button
-                style : {
-                    backgroundColor : "transparent"
-                }
-            }), // center
-        }), // inkwell
+        "/": new TestPage(), // inkwell
         
         "/test" : new Scaffold({
             
@@ -177,7 +159,7 @@ App.prototype.onReady = function () {
         })  // scaffold
     });
 
-    Navigation.push("/test");
+    Navigation.push("/");
 }
 
 App.prototype.onBackButton = function () {

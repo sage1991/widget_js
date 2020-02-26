@@ -8,6 +8,47 @@
 }
 
 
+*:focus {
+    outline:none;  /* 버튼 터치 시 아웃라인 제거 */
+}
+
+.next_page_animation {
+    will-change: transform, opacity;
+    animation-duration: 0.3s;
+    animation-name: animate_next_page;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animate_next_page {
+    0% {
+        opacity: 0;
+        transform: translateX(70%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+        will-change: auto;
+    }
+}
+
+.before_page_animation {
+    will-change: transform, opacity;
+    animation-duration: 0.3s;
+    animation-name: animate_before_page;
+    animation-fill-mode: forwards;
+}
+
+@keyframes animate_before_page {
+    0% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(70%);
+        will-change: auto;
+    }
+}
 
 
 
@@ -29,6 +70,10 @@ html, body {
 
 .flat_button {
     background-color: white;
+    border: none;
+}
+
+.flat_button:active {
     border: none;
 }
 
