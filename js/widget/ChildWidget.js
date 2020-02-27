@@ -27,12 +27,11 @@ ChildWidget.prototype.getWidgetByKey = function(key) {
     var result = null;
     if(this.html.dataset.key == key) {
         result = this;
-    } else {
+    } else if(this.child != null) {
         result = this.child.getWidgetByKey(key);
     }
     return result;
 }
-
 
 
 
@@ -41,7 +40,9 @@ ChildWidget.prototype.getWidgetsByGroup = function(group) {
     if(this.html.dataset.group == group) {
         widgetGroup.push(this);
     }
-    widgetGroup.concat(this.child.getWidgetsByGroup(group));
+    if(this.child != null) {
+        widgetGroup.concat(this.child.getWidgetsByGroup(group));
+    }
     return widgetGroup;
 }
 

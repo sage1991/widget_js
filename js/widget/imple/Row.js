@@ -19,14 +19,17 @@ Row.prototype.initWidget = function() {
     
     if(this.reverse) {
         this.frame.style.flexDirection = "row-reverse";
+        this.frame.style.webkitFlexDirection = "row-reverse";
     }
     
     if(this.justifyContent != null) {
         this.frame.style.justifyContent = this.justifyContent;
+        this.frame.style.webkitJustifyContent = this.justifyContent;
     }
     
     if(this.alignItems != null) {
         this.frame.style.alignItems = this.alignItems;
+        this.frame.style.webkitAlignItems = this.alignItems;
     }
     
 }

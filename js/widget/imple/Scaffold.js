@@ -43,7 +43,7 @@ Scaffold.prototype.initWidget = function() {
 /* @override */
 Scaffold.prototype.build = function() {
     return  "<div data-widget-name='Scaffold' data-key='" + this.key + "' data-group='" + this.group + "' class='scaffold'>" + 
-                "<div data-widget-name='Scaffold-appbar' style='width:100%; height:54px; background-color:skyblue;'></div>" + 
+                "<div data-widget-name='Scaffold-appbar' style='width:100%; height:54px;' class='scaffold_app_bar'></div>" + 
                 "<div data-widget-name='Scaffold-body' style='width:100%; height:calc(100vh - 124px);'></div>" + 
                 "<div data-widget-name='Scaffold-bottom-navigation' style='width:100%; height:56px; background-color:black;'></div>" + 
                 "<div data-widget-name='Scaffold-drawer' style='position:absolute; left:100%; top:0px; width:100%; height:100% transition: background-color 0.5s;'></div>" + 
