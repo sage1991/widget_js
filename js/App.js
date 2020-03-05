@@ -7,9 +7,9 @@ App.prototype.onReady = function () {
     window.Navigation = new Navigation(document.getElementById("widget_view"));
 
     Navigation.route({
-        "/": new TestPage(), // inkwell
-        
-        "/test" : new Scaffold({
+        "/" : new TestPage(), // inkwell
+        "/test1" : new TestPage2(),
+        "/test2" : new Scaffold({
             
             // app bar
             appBar : new InkWell({

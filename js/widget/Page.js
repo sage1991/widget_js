@@ -17,7 +17,10 @@ Page.prototype.onDestroy = /* abstract void */ function() {}
 
 
 /* destroy page */
-Page.prototype.destroy = /* abstract */ function() {}
+Page.prototype.destroy = function() {
+    this.onDestroy();
+    this.widget.destroy();
+}
 
 
 /*
@@ -26,11 +29,13 @@ Page.prototype.destroy = /* abstract */ function() {}
 Page.prototype.appendTo = function(target) {
     
     var widget = this.widget;
-    this.widget.appendTo(target);
-    this.widget.addClass("next_page_animation");
-    this.widget.html.addEventListener("animationend", function() {
+    widget.appendTo(target);
+    widget.addClass("next_page_animation");
+    var animationEnd = function() {
         widget.removeClass("next_page_animation");
-    });
+        widget.html.removeEventListener("animationend", animationEnd);
+    }
+    widget.html.addEventListener("animationend", animationEnd);
 }
 
 
@@ -38,7 +43,15 @@ Page.prototype.appendTo = function(target) {
     [ removeFrom() ]
 */
 Page.prototype.removeFrom = function(target) {
-     this.widget.removeFrom(target);
+    var _this = this;
+    var widget = this.widget;
+    widget.addClass("before_page_animation");
+    var animationEnd = function() {
+        widget.removeClass("before_page_animation");
+        widget.html.removeEventListener("animationend", animationEnd);
+        widget.removeFrom(target);
+    }
+    widget.html.addEventListener("animationend", animationEnd);
 }
 
 

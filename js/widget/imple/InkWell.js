@@ -4,7 +4,7 @@ function InkWell(context) {
     
     this.inkColor = (context.inkColor) ? context.inkColor : "rgba(150, 150, 150, 0.1)";
     this.backgroundColor = (context.backgroundColor) ? context.backgroundColor : "rgba(100, 100, 100, 0.1)";
-    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 8;
+    this.diffusionSpeed = (context.diffusionSpeed) ? context.diffusionSpeed : 5;
     
     ChildWidget.call(this, context);
 }
@@ -16,6 +16,7 @@ InkWell.prototype = Object.create(ChildWidget.prototype);
 InkWell.prototype.initWidget = function() {
     this.frame = this.html.querySelector("div");
     this._initEvent();
+    this.inkwellTimer = null;
 }
 
 
@@ -38,43 +39,50 @@ InkWell.prototype._initEvent = function() {
     this.html.addEventListener("touchstart", function(e) {
         
         if(_this.circle == null) {
-            var x = e.targetTouches[0].pageX - _this.html.offsetLeft;
-            var y = e.targetTouches[0].pageY - _this.html.offsetTop;
-            _this.circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            _this.circle.setAttribute("cx", x);
-            _this.circle.setAttribute("cy", y);
-            _this.circle.setAttribute("r", _this.radius);
-            _this.circle.setAttribute("fill", _this.inkColor);
-            _this.svg.style.backgroundColor = _this.backgroundColor;
-            _this.svg.appendChild(_this.circle);
-            
-            // inkwell animation
-            var animate = function() {
-                
-                _this.maxRadius = Math.sqrt(Math.pow(_this.html.offsetWidth, 2) + Math.pow(_this.html.offsetHeight, 2));
-                _this.radius += _this.diffusionSpeed;
+            _this.inkwellTimer = setTimeout(function() {
+                var x = e.targetTouches[0].pageX - _this.html.offsetLeft;
+                var y = e.targetTouches[0].pageY - _this.html.offsetTop;
+                _this.circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                _this.circle.setAttribute("cx", x);
+                _this.circle.setAttribute("cy", y);
                 _this.circle.setAttribute("r", _this.radius);
-                _this.inkWellAnimationId = requestAnimationFrame(animate);
-                
-                // cancel animation when radius reach up to max radius
-//                if(_this.maxRadius <= _this.radius) {
-//                    cancelAnimationFrame(_this.inkWellAnimationId);
-//                    _this.inkWellAnimationId = null;
-//                } 
-//                
-//                // other case
-//                else {
-//                    _this.circle.setAttribute("r", _this.radius);
-//                    _this.inkWellAnimationId = requestAnimationFrame(animate);
-//                }
-            }
+                _this.circle.setAttribute("fill", _this.inkColor);
+                _this.svg.style.backgroundColor = _this.backgroundColor;
+                _this.svg.appendChild(_this.circle);
+
+                // inkwell animation
+                var animate = function() {
+
+                    _this.maxRadius = Math.sqrt(Math.pow(_this.html.offsetWidth, 2) + Math.pow(_this.html.offsetHeight, 2));
+                    _this.radius += _this.diffusionSpeed;
+                    _this.circle.setAttribute("r", _this.radius);
+                    _this.inkWellAnimationId = requestAnimationFrame(animate);
+
+                    // cancel animation when radius reach up to max radius
+//                    if(_this.maxRadius <= _this.radius) {
+//                        cancelAnimationFrame(_this.inkWellAnimationId);
+//                        _this.inkWellAnimationId = null;
+//                    } 
+//
+                    // other case
+//                    else {
+//                        _this.circle.setAttribute("r", _this.radius);
+//                        _this.inkWellAnimationId = requestAnimationFrame(animate);
+//                    }
+                }
+
+                animate();
+            }, 300);
             
-            animate();
         }
     });
     
     // cancel inkwell animation wen touch move or end
     this.html.addEventListener("touchmove", function(e) {
+        if(_this.inkwellTimer != null) {
+            clearTimeout(_this.inkwellTimer);
+            _this.inkwellTimer = null;
+        }
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
             _this.inkWellAnimationId = null;
@@ -87,6 +95,10 @@ InkWell.prototype._initEvent = function() {
     
     
     this.html.addEventListener("touchend", function(e) {
+        if(_this.inkwellTimer != null) {
+            clearTimeout(_this.inkwellTimer);
+            _this.inkwellTimer = null;
+        }
         if(_this.circle != null) {
             cancelAnimationFrame(_this.inkWellAnimationId);
             _this.inkWellAnimationId = null;
