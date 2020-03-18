@@ -1,0 +1,24 @@
+{
+  "name": "widgetjs",
+  "version": "1.0.0",
+  "description": "javascript ui framework for mobile hybrid application",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sage1991/widget_js.git"
+  },
+  "author": "harry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sage1991/widget_js/issues"
+  },
+  "homepage": "https://github.com/sage1991/widget_js#readme",
+  "devDependencies": {
+    "lite-server": "^2.5.4"
+  },
+  "dependencies": {}
+}
