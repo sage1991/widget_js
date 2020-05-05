@@ -1,7 +1,7 @@
 {
-  "name": "widgetjs",
+  "name": "typescript-widget",
   "version": "1.0.0",
-  "description": "javascript ui framework for mobile hybrid application",
+  "description": "ui framework with typescript",
   "main": "index.html",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/sage1991/widget_js#readme",
   "devDependencies": {
-    "lite-server": "^2.5.4"
+    "lite-server": "^2.5.4",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "dependencies": {}
 }
